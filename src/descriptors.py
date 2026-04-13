@@ -76,5 +76,13 @@ class StatusIconDescriptor:
             return self
         return self.ICONS.get(obj.status, "❓")
 
-
+class TaskTypeDescriptor:
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        return obj.__dict__.get('_task_type', 'default')
+    def __set__(self, obj, value):
+        if not isinstance(value, str):
+            raise TypeError("Тип задачи должен быть строкой")
+        obj.__dict__['_task_type'] = value
 

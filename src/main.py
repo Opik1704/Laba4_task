@@ -1,3 +1,8 @@
+import asyncio
+import logging
+
+from src.AsyncTaskExecutor import AsyncTaskExecutor
+from src.AsyncTaskQueue import AsyncTaskQueue
 from src.Task import Task
 from src.TaskQueue import TaskQueue
 from src.TaskSource import TaskSource
@@ -6,38 +11,33 @@ from src.GeneratorTaskSource import GeneratorTaskSource
 from src.APITaskSource import APITaskSource
 
 from src.exceptions import TaskPriorityError, TaskIdError
+from src.handlers import EmailTaskHandler, ReportTaskHandler, DatabaseTaskHandler
 
 
-def main():
+async def main():
     """Вход в приложение и создание tasks и вызов методов"""
-    tasks = [
-        Task(id="Task1", description="Первая задача", priority="high"),
-        Task(id="Task2", description="Вторая задача", priority="low"),
-        Task(id="Task3", description="Третья задача", priority="medium"),
-        Task(id="Task1", description="Первая задача", priority="high"),
-        Task(id="Task2", description="Вторая задача", priority="low"),
-        Task(id="Task3", description="Третья задача", priority="medium"),
-        Task(id="Task1", description="Первая задача", priority="high"),
-        Task(id="Task2", description="Вторая задача", priority="low"),
-        Task(id="Task3", description="Третья задача", priority="medium"),
-    ]
+    logging.basicConfig(level=logging.INFO)
 
-    queue = TaskQueue(tasks)
+    async_queue = AsyncTaskQueue()
+    executor = AsyncTaskExecutor(async_queue)
 
-    print("Первый обход (фильтрация)")
-    high_prio = queue.filter_by_priority("high")
-    for task in high_prio:
-        print(f"Найдена {task.id} [{task.priority}]")
+    executor.register_handler("email", EmailTaskHandler())
+    executor.register_handler("report", ReportTaskHandler())
+    executor.register_handler("database", DatabaseTaskHandler())
 
-    print("\nПовторный обход (вся очередь через list)")
-    all_tasks = list(queue)
-    print(f"Количество задач при повторном обращении {len(all_tasks)}")
 
-    for t in all_tasks:
-        print(f"- {t.id}: {t.description}")
+    source = APITaskSource()
+    tasks = source.get_tasks()
 
-    low_count = sum(1 for _ in queue.filter_by_priority("low"))
-    print(f"Количество задач с низким приоритетом: {low_count}")
+    tasks[0].task_type = "email"
+    tasks[1].task_type = "report"
+    tasks[2].task_type = "database"
+
+    async with executor:
+        for t in tasks:
+            await async_queue.put(t)
+
+        await asyncio.sleep(5)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

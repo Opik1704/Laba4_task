@@ -9,9 +9,9 @@ class APITaskSource:
         """Создание фейковых тасков которые должны передатся с апи"""
         self.endpoint = endpoint
         self.mock_data = [
-            { "id": "api_task_1","description": "Описание смешное","priority": "high","status": "pending"},
-            { "id": "api_task_2","description": "Описание несмешное","priority": "medium","status": "in_progress"},
-            { "id": "api_task_3","description": "Обновление документации","priority": "low", "status": "pending"}
+            { "id": "api_task_15","description": "Задача очень важная","priority": "high","status": "pending"},
+            { "id": "api_task_25","description": "Описание несмешное","priority": "medium","status": "pending"},
+            { "id": "api_task_35","description": "Обновление документации","priority": "low", "status": "pending"}
         ]
     def get_tasks(self):
         """

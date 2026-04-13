@@ -11,6 +11,8 @@ class Task:
 
     icon = StatusIconDescriptor()
 
+    task_type = TaskTypeDescriptor()
+
     def __init__(self, id:str, description:str,priority:str ,status:str = "pending"):
         self.id = id
         self.description = description
@@ -19,6 +21,7 @@ class Task:
         self._created_at = datetime.now()
         self._started_at: Optional[datetime] = None
         self._completed_at: Optional[datetime] = None
+        task_type = "default"
 
     @property
     def created_at(self):
