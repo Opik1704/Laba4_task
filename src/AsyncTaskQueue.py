@@ -1,10 +1,9 @@
 import asyncio
 import logging
-from asyncio import Condition
 from collections import deque
 from typing import Deque, List
 
-from src import TaskHandler, Task
+from src import Task
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

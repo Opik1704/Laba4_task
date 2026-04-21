@@ -1,5 +1,6 @@
-from typing import Iterable, Iterator, Callable
+from typing import Iterable, Iterator
 from src.Task import Task
+
 class TaskQueue:
     def __init__(self,tasks: Iterable[Task]):
         """Инициализация"""

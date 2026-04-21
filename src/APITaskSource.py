@@ -1,4 +1,3 @@
-from src.TaskSource import TaskSource
 from src.Task import Task
 
 class APITaskSource:

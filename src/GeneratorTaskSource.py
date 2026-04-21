@@ -2,7 +2,6 @@ from typing import List
 import random
 
 from src.Task import Task
-from src.TaskSource import TaskSource
 
 
 class GeneratorTaskSource:
