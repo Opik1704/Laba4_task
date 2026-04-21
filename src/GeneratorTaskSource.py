@@ -1,8 +1,10 @@
-from typing import List
+import logging
 import random
-
 from src.Task import Task
+from typing import List
 
+
+logger = logging.getLogger(__name__)
 
 class GeneratorTaskSource:
     DESCRIPTIONS = ["Описание1","Описание2","Описание3","Описание4","Описание5"]
@@ -23,6 +25,8 @@ class GeneratorTaskSource:
             try:
                 task = Task(id=task_id,description=description,priority=priority,status=status)
                 tasks.append(task)
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Не удалось сгенерировать задачу {task_id} - {e}")
                 continue
+        logger.info(f"Сгенерировано задач: {len(tasks)}")
         return tasks

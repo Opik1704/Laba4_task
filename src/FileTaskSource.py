@@ -1,10 +1,11 @@
 import json
+import logging
 from typing import List
 
 from src.Task import Task
 from src.TaskSource import TaskSource
 
-
+logger = logging.getLogger(__name__)
 class FileTaskSource:
     """
     Читает задачи из Json файла
@@ -25,15 +26,16 @@ class FileTaskSource:
                     task = Task(id=item["id"],description=item.get("description", ""),priority=item.get("priority", "medium"),status=item.get("status", "pending")
                     )
                     tasks.append(task)
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Пропущена некорректная задача в файле: {e}")
                     continue
             return tasks
         except FileNotFoundError:
-            print("Файл не найден")
+            logger.error(f"Файл {self.filename} не найден")
             return []
         except json.JSONDecodeError:
-            print("Файл не формата JSON")
+            logger.error(f"Файл {self.filename} имеет некорректный формат JSON")
             return []
         except Exception as e:
-            print("Ошибка",e)
+            logger.error("Ошибка",e)
             return []

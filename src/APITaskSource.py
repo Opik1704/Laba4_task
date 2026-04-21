@@ -1,4 +1,8 @@
+import logging
+
 from src.Task import Task
+
+logger = logging.getLogger(__name__)
 
 class APITaskSource:
     """
@@ -25,7 +29,8 @@ class APITaskSource:
                     priority=task["priority"],
                     status=task["status"]
                 ))
+            logger.info(f"Успешно получено {len(tasks)} задач из API")
             return tasks
         except Exception as e:
-            print("Ошибка",e)
+            logger.error(f"Ошибка при получении задач из API {e}")
             return []

@@ -1,10 +1,11 @@
 import asyncio
+import logging
 from typing import Dict
 
 from src.TaskHandler import TaskHandler
 from src import AsyncTaskQueue
-from src.AsyncTaskQueue import logger
 
+logger = logging.getLogger(__name__)
 
 class AsyncTaskExecutor:
     """Асинхронный исполнитель задач с поддержкой разных обработчиков"""
@@ -23,10 +24,10 @@ class AsyncTaskExecutor:
     async def _worker(self) -> None:
         """Рабочий обрабатывает задачи"""
         self._running = True
-        print(f"worker запущен")
+        logger.info("Worker запущен")
         while self._running:
             task = await self.queue.get()
-            print(f"worker получил задачу {task.id}")
+            logger.info(f"Worker получил задачу {task.id}")
 
             task_type = getattr(task, 'task_type', 'default')
             handler = self.handlers.get(task_type)
